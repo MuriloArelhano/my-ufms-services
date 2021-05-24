@@ -32,10 +32,12 @@ class User implements IUser {
     @UpdateDateColumn({ type: "timestamp" })
     updated_At?: Date
 
-    constructor(email: string, password: string) {
+    constructor(email: string, password: string, phone_number: number) {
         this.id = v4()
         this.email = email
         this.password = password
+        this.phone_number = phone_number
+        
     }
 
     @BeforeInsert()
