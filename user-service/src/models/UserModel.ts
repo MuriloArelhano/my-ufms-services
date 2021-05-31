@@ -1,20 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate, OneToOne, PrimaryColumn } from "typeorm";
 import { v4 } from "uuid";
 import bcrypt from "bcrypt";
+import { IUser } from "../types";
+import { Profile } from "./ProfileModel";
 
-interface IUser{
-    id: string
-    email: string
-    password: string
-    phone_number: number
-    created_At?: Date
-    updated_At?: Date
-}
+@Entity('user')
+export class User implements IUser {
 
-@Entity({ name: "users" })
-class User implements IUser {
-
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryGeneratedColumn("uuid", { name: 'user_id' })
     id: string
 
     @Column()
@@ -22,9 +15,12 @@ class User implements IUser {
 
     @Column()
     password: string
-    
-    @Column()
-    phone_number: number
+
+    @OneToOne(() => Profile, (profile: Profile) => profile.user)
+    profile: Profile
+
+    @Column({ name: "phone_number", unique: true, nullable: true })
+    phoneNumber: number
 
     @CreateDateColumn({ type: "timestamp" })
     created_At?: Date
@@ -32,12 +28,12 @@ class User implements IUser {
     @UpdateDateColumn({ type: "timestamp" })
     updated_At?: Date
 
-    constructor(email: string, password: string, phone_number: number) {
-        this.id = v4()
+    constructor(email: string, password: string, phone_number: number, id?: string) {
+        this.id = id ? id : v4()
         this.email = email
         this.password = password
-        this.phone_number = phone_number
-        
+        this.phoneNumber = phone_number
+
     }
 
     @BeforeInsert()
@@ -48,5 +44,3 @@ class User implements IUser {
 
 
 }
-
-export { User }
