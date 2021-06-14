@@ -10,11 +10,11 @@ export class Profile extends BaseEntity implements IProfile {
     @PrimaryGeneratedColumn("uuid")
     id: string
 
-    @OneToOne(() => User, (user: User) => user.profile)
+    @OneToOne(() => User, (user: User) => user.profile, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
     user: User
 
-    @Column()
+    @Column({ nullable: true })
     photo?: string
 
     @Column({ name: 'complete_name' })
@@ -23,11 +23,11 @@ export class Profile extends BaseEntity implements IProfile {
     @Column({ type: "date" })
     birthdate: Date
 
-    @OneToOne(() => Gender, { nullable: true })
+    @OneToOne(() => Gender, { nullable: true, onDelete: 'SET NULL' })
     @JoinColumn({ name: 'gender_id', referencedColumnName: 'id' })
     gender?: Gender
 
-    @Column()
+    @Column({ nullable: true })
     biography?: string
 
     @CreateDateColumn({ type: "timestamp" })

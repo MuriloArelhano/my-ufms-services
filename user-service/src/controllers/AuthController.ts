@@ -54,12 +54,14 @@ class AuthController {
 
         try {
 
+            // Implementar um CRFS para segurança
             var privateKey = fs.readFileSync(path.join(__dirname, '..', '..', 'private.key'));
             const token = JWT.sign(payload, privateKey, signOptions)
-            return res.status(StatusCodes.OK).json({
-                msg: 'Usuário logado com sucesso',
-                token: token
-            })
+            return res.cookie('usrJwtToken', token, {httpOnly: true, expires: new Date(Date.now() + 2 * 3600000) })
+                .status(StatusCodes.OK).json({
+                    msg: 'Usuário logado com sucesso',
+                    token: token
+                })
 
         } catch (err) {
             console.log(err);

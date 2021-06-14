@@ -1,16 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate, OneToOne, PrimaryColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate, OneToOne, PrimaryColumn, Index, ManyToOne, OneToMany, BaseEntity } from "typeorm";
 import { v4 } from "uuid";
 import bcrypt from "bcrypt";
 import { IUser } from "../types";
 import { Profile } from "./ProfileModel";
+import { Invite } from "./InviteModel";
 
 @Entity('user')
-export class User implements IUser {
+export class User extends BaseEntity implements IUser {
 
-    @PrimaryGeneratedColumn("uuid", { name: 'user_id' })
+    @PrimaryGeneratedColumn("uuid")
     id: string
 
-    @Column()
+    @Column({ unique: true })
     email: string
 
     @Column()
@@ -18,6 +19,12 @@ export class User implements IUser {
 
     @OneToOne(() => Profile, (profile: Profile) => profile.user)
     profile: Profile
+
+    @OneToMany(() => Invite, (invite: Invite) => invite.userSender)
+    inviteSender: Invite[]
+
+    @OneToMany(() => Invite, (invite: Invite) => invite.userReceiver)
+    inviteReceiver: Invite[]
 
     @Column({ name: "phone_number", unique: true, nullable: true })
     phoneNumber: number
@@ -29,6 +36,7 @@ export class User implements IUser {
     updated_At?: Date
 
     constructor(email: string, password: string, phone_number: number, id?: string) {
+        super()
         this.id = id ? id : v4()
         this.email = email
         this.password = password

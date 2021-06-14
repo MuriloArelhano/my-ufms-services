@@ -14,47 +14,40 @@ import { WebRequestError } from "../utils/errors";
 class AuthMiddleware {
     async validateUser(req: Request, res: Response, next: NextFunction) {
         const { email, password } = req.body as UserRequestBody
-        const userRepository = getRepository(User);
-        const user = await userRepository.findOne({ where: { email: email } })
-        if (!user) {
-            return res.status(StatusCodes.NOT_FOUND).json({
-                statusMsg: ReasonPhrases.NOT_FOUND,
-                msg: "Email ou senha incorretos, ou talvez precise de cadastrar!"
-            })
-        }
         try {
+            const userRepository = getRepository(User);
+            const user = await userRepository.findOne({ where: { email: email } })
+
+            if (!user) {
+                throw new WebRequestError("Email ou senha incorretos, ou talvez precise de cadastrar!", StatusCodes.NOT_FOUND)
+            }
             const isValid = bcrypt.compareSync(password, user.password)
             if (isValid) {
                 delete user.password
                 delete req.body.password
-                req.body.userId = user
+                req.body.userId = user.id
                 next()
             }
             else {
-                return res.status(StatusCodes.NOT_FOUND).json({
-                    statusMsg: ReasonPhrases.NOT_FOUND,
-                    msg: "Email ou senha incorretos, ou talvez precise se cadastrar!"
-                })
+                throw new WebRequestError("Email ou senha incorretos, ou talvez precise se cadastrar!", StatusCodes.NOT_FOUND)
             }
 
-        } catch {
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                statusMsg: ReasonPhrases.INTERNAL_SERVER_ERROR,
-                msg: "Ocorreu um erro inesperado"
-            })
+        } catch (error) {
+            next(error)
         }
 
     }
 
     validateJWT(req: Request, res: Response, next: NextFunction) {
-        const jwtUserToken = req.body.jwtUserToken || req.get('Authorization') || req.query.jwtUserToken 
+
+        const usrJwtToken = req.body.usrJwtToken || req.get('Authorization') || req.query.usrJwtToken || req.cookies.usrJwtToken
         try {
             var publicKey = fs.readFileSync(path.join(__dirname, '..', '..', 'public.key'));
-            JWT.verify(jwtUserToken, publicKey, verifyOptions, (err, decoded: any) => {
+            JWT.verify(usrJwtToken, publicKey, verifyOptions, (err, decoded: any) => {
                 if (err) {
-                    throw new WebRequestError("Token invalido ou expirado", StatusCodes.BAD_REQUEST)
+                    throw new WebRequestError("Token invalido ou expirado", StatusCodes.UNAUTHORIZED)
                 }
-                req.body.userId = decoded.userId
+                req.body.jwtUserId = decoded.userId
                 next()
             })
 

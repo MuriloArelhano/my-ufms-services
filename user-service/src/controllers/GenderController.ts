@@ -8,22 +8,47 @@ import { GenderUpdateRequestBody } from "../types";
 
 class GenderController {
 
+    async getAllGenders(req: Request, res: Response, next: NextFunction) {
+        try {
+            let genderRepo = getRepository(Gender)
+            const genders = await genderRepo.find()
+            return res.status(StatusCodes.OK).json(genders)
+
+        } catch (err: any) {
+            next(err)
+        }
+    }
+
+    async getByIdOrName(req: Request, res: Response, next: NextFunction) {
+        const { genderName, genderId } = req.body as GenderUpdateRequestBody
+        try {
+            let genderRepo = getRepository(Gender)
+            const gender = await genderRepo.findOne(genderId, {
+                where: [{ name: genderName }, { id: genderId }]
+            })
+            if (!gender) {
+                throw new WebRequestError('Esse gênero não foi encontrado', StatusCodes.NOT_FOUND)
+            }
+            return res.status(StatusCodes.OK).json(gender)
+
+        } catch (err: any) {
+            next(err)
+        }
+    }
+
     async createNewGender(req: Request, res: Response, next: NextFunction) {
         const { genderName, genderId } = req.body as GenderUpdateRequestBody
         try {
             let genderRepo = getRepository(Gender)
-            const isGenderExists = await genderRepo.findOne({
-                where: [
-                    { name: genderName },
-                    { id: genderId }
-                ]
+            const isGenderExists = await genderRepo.findOne(genderId, {
+                where: [{ name: genderName }, { id: genderId }]
             })
             if (isGenderExists) {
-                throw new WebRequestError('Esse genero já foi criado!', StatusCodes.CONFLICT)
+                throw new WebRequestError('Esse gênero já foi criado', StatusCodes.CONFLICT)
             }
             let newGender = new Gender(genderName)
             const savedGender = await genderRepo.save(newGender)
-            return res.json(savedGender)
+            return res.status(StatusCodes.OK).json({ gender: savedGender, msg: 'Gênero salvo com sucesso' })
         } catch (err: any) {
             next(err)
         }
@@ -31,20 +56,17 @@ class GenderController {
     }
 
     async updateGender(req: Request, res: Response, next: NextFunction) {
-        const { genderName, genderId } = req.body as GenderUpdateRequestBody
+        const { genderName, genderId, newGenderName } = req.body as GenderUpdateRequestBody
         try {
             let genderRepo = getRepository(Gender)
-            const isGenderExists = await genderRepo.findOne({
-                where: [
-                    { name: genderName },
-                    { id: genderId }
-                ]
+            const isGenderExists = await genderRepo.findOne(genderId, {
+                where: [{ name: genderName }, { id: genderId }]
             })
-            if (isGenderExists) {
-                throw new WebRequestError('Esse genero já foi criado!', StatusCodes.CONFLICT)
+            if (!isGenderExists) {
+                throw new WebRequestError('Esse gênero já foi criado!', StatusCodes.CONFLICT)
             }
-            const savedGender = await genderRepo.update(isGenderExists.id, { name: genderName })
-
+            const savedGender = await genderRepo.update(isGenderExists.id, { name: newGenderName })
+            return res.status(StatusCodes.OK).json({ msg: 'Gênero atualizado com sucesso' })
         } catch (err: any) {
             next(err)
         }
@@ -54,28 +76,14 @@ class GenderController {
         const { genderName, genderId } = req.body as GenderUpdateRequestBody
         try {
             let genderRepo = getRepository(Gender)
-            const isGenderExists = await genderRepo.findOne({
-                where: [
-                    { name: genderName },
-                    { id: genderId }
-                ]
+            const isGenderExists = await genderRepo.findOne(genderId, {
+                where: [{ name: genderName }, { id: genderId }]
             })
             if (!isGenderExists) {
-                throw new WebRequestError('Esse não existe mais no banco de dados.', StatusCodes.CONFLICT)
+                throw new WebRequestError('Esse gênero não existe mais no banco de dados', StatusCodes.CONFLICT)
             }
             const respo = await genderRepo.delete(isGenderExists)
-
-        } catch (err: any) {
-            next(err)
-        }
-    }
-
-    async getAllGenders(req: Request, res: Response, next: NextFunction) {
-        try {
-            let genderRepo = getRepository(Gender)
-            const genders = await genderRepo.find()
-            return res.status(StatusCodes.OK).json(genders)
-
+            return res.status(StatusCodes.OK).json({ msg: 'Gênero deletado com sucesso' })
         } catch (err: any) {
             next(err)
         }
