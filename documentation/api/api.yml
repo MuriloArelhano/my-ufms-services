@@ -1,0 +1,115 @@
+openapi: "3.0.0"
+info:
+  title: My UFMS APIs
+  version: "1.0.0"
+  description: API construida na arquitetura de micro serviços para suprir serviços da rede social interna da UFMS.
+  contact:
+    name: Murilo Arelhano
+    email: murilo.arelhano@hotmail.com
+
+servers:
+  - url: http://localhost:3333/v1
+
+paths:
+  /gender:
+    get:
+      description: Returns all genders
+      responses:
+        "200":
+          description: OK
+
+  /gender/{id}/{name}:
+    get:
+      parameters:
+        - $ref: "#components/parameters/id"
+        - $ref: "#components/parameters/name"
+      description: Returns a gender by id or name
+      responses:
+        "200":
+          description: OK
+    delete:
+      description: Delete a gender by id or name
+      responses:
+        "200":
+          description: OK
+
+  /user:
+    delete:
+      description: Delete all user information
+      responses:
+        "200":
+          description: OK
+
+    get:
+      description: Get all user information
+      responses:
+        "200":
+          description: OK
+
+  /auth/signup:
+    post:
+      description: Create a new user and before creating a profile for the user
+      requestBody:
+        required: true
+        description: User information to register
+        content:
+          application/json:
+            schema:
+              $ref: "#components/schemas/signup"
+
+      responses:
+        "200":
+          description: OK
+
+  /auth/signin:
+    post:
+      description: Return a JWT token to authorization user
+      requestBody:
+        required: true
+        description: User information to register
+        content:
+          application/json:
+            schema:
+              $ref: "#components/schemas/signup"
+      responses:
+        "200":
+          description: ok
+
+components:
+  schemas:
+    signup:
+      type: object
+      properties:
+        email:
+          type: string
+          required:
+            - "email"
+        password:
+          type: string
+    signin:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+  parameters:
+    id:
+      name: id
+      in: path
+      description: Pass directly id of row
+      schema:
+        type: string
+    name:
+      name: name
+      in: path
+      description: In some cases you don't need id
+      schema:
+        type: string
+
+  securitySchemes:
+    name:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

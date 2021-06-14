@@ -1,76 +1,74 @@
 import { getRepository } from "typeorm"
+import { StatusCodes } from "http-status-codes";
+import { Response, Request, NextFunction } from "express";
+import { WebRequestError } from "../utils/errors";
+import { UserRequestBody } from "../types";
 import { User } from "../models/UserModel";
-import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import { Response, Request } from "express";
-import JWT, { sign } from "jsonwebtoken";
-import fs from "fs";
-import path from 'path'
+import bcrypt from 'bcrypt'
 
 
-interface UserResquestBody {
-    email: string,
-    password: string,
-    jwtToken?: string
-}
+class UserController  {
 
-export class UserController {
+    async getById(req: Request, res: Response, next: NextFunction) {
+        const { jwtUserId: userId } = req.body as UserRequestBody
+        try {
+            const userRepo = getRepository(User)
+            const user = await userRepo.findOne(userId)
 
-    /**
-     * Ess função é responsavel por realizar o cadastro de um novo usuário
-     * @param req - { email, password }
-     * @param res 
-     * @returns 
-     */
-    static async signup(req: Request, res: Response) {
-        const { email, password } = req.body as UserResquestBody
-        const userRepository = getRepository(User);
-        const user = await userRepository.findOne({ where: { email: email } })
-        if (user) {
-            return res.status(StatusCodes.CONFLICT).json({
-                msg: "Esse usuário já existe!"
-            })
+            if (!user)
+                throw new WebRequestError('Usuário não encontrado', StatusCodes.BAD_REQUEST)
+
+            delete user.password
+            return res.status(StatusCodes.OK).json(user)
+
+        } catch (err: any) {
+            next(err)
         }
-        const respo = await userRepository.save(new User(email, password))
-        return res.send(respo)
+
     }
 
-    /**
-     * Função responsavel por fazer o login do usuário e gerar o token JWT que será usado pelo usário
-     * @param req 
-     * @param res 
-     * @returns Token JWT com algoritimo ES256
-     */
-    static async signin(req: Request, res: Response) {
-        console.log(req.body);
 
-        var i = 'Nextep'
-        var a = 'http://nexteps.com.br'
-        var s = req.body.email
-
-        var signOptions: JWT.SignOptions = {
-            issuer: i,
-            subject: s,
-            audience: a,
-            expiresIn: "2h",
-            algorithm: "RS256"
-        }
-
-        var payload = {
-            userId: req.body.userId
-        }
+    async update(req: Request, res: Response, next: NextFunction) {
+        const { jwtUserId: userId, phone } = req.body as UserRequestBody
 
         try {
+            const userRepo = getRepository(User)
+            const user = await userRepo.findOne(userId)
 
-            var privateKey = fs.readFileSync(path.join(__dirname, '..', '..', 'private.key'));
-            const token = JWT.sign(payload, privateKey, signOptions)
-            return res.status(StatusCodes.OK).json({
-                msg: 'Usuário logado com sucesso',
-                token: token
-            })
-        } catch (err) {
-            console.log(err);
+            if (!user)
+                throw new WebRequestError('Usuário não encontrado', StatusCodes.BAD_REQUEST)
+
+            const newUser = await userRepo.update({ id: user.id }, { phoneNumber: phone })
+            return res.status(StatusCodes.OK).json(newUser)
+
+        } catch (err: any) {
+            next(err)
+        }
+
+    }
+
+    async delete(req: Request, res: Response, next: NextFunction) {
+        const { jwtUserId, password } = req.body as UserRequestBody
+        try {
+            const userRepo = getRepository(User)
+            const user = await userRepo.findOne(jwtUserId)
+            console.log(user);
+            
+            if (!user)
+                throw new WebRequestError('Usuário não encontrado', StatusCodes.BAD_REQUEST)
+
+            if (bcrypt.compareSync(password, user.password))
+                await userRepo.delete(user)
+
+            delete req.body.password
+            return res.status(StatusCodes.OK).json({ msg: 'Usuário deletado com sucesso' })
+
+        } catch (err: any) {
+            next(err)
         }
 
     }
 
 }
+
+export default new UserController();
