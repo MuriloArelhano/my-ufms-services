@@ -94,22 +94,8 @@ components:
         password:
           type: string
 
-  parameters:
-    id:
-      name: id
-      in: path
-      description: Pass directly id of row
-      schema:
-        type: string
-    name:
-      name: name
-      in: path
-      description: In some cases you don't need id
-      schema:
-        type: string
-
   securitySchemes:
-    name:
+    jwtAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
