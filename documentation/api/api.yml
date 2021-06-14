@@ -18,7 +18,7 @@ paths:
         "200":
           description: OK
 
-  /gender/{id}:
+  /gender/{id}/{name}:
     get:
       description: Returns a gender by id or name
       responses:
