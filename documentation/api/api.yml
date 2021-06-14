@@ -18,7 +18,7 @@ paths:
         "200":
           description: OK
 
-  /gender/{id}/{name}:
+  /gender/{id}:
     get:
       parameters:
         - $ref: "#components/parameters/id"
