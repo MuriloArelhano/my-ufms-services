@@ -20,9 +20,6 @@ paths:
 
   /gender/{id}:
     get:
-      parameters:
-        - $ref: "#components/parameters/id"
-        - $ref: "#components/parameters/name"
       description: Returns a gender by id or name
       responses:
         "200":
