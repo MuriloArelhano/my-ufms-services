@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 import { v4 } from "uuid";
 import { IGender } from "../types";
 

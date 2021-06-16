@@ -1,5 +1,5 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { getRepository } from "typeorm";
+import { getConnection, getConnectionManager, getRepository } from "typeorm";
 import { User } from "../models/UserModel";
 import bcrypt from "bcrypt";
 import { NextFunction, Request, Response } from "express";
@@ -15,7 +15,7 @@ class AuthMiddleware {
     async validateUser(req: Request, res: Response, next: NextFunction) {
         const { email, password } = req.body as UserRequestBody
         try {
-            const userRepository = getRepository(User);
+            const userRepository = getRepository(User)
             const user = await userRepository.findOne({ where: { email: email } })
 
             if (!user) {

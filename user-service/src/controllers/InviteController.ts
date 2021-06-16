@@ -79,9 +79,10 @@ class InviteController {
 
     async delete(req: Request, res: Response, next: NextFunction) {
         const { inviteId, jwtUserId, userSenderId } = req.body as InviteRequestBody
-        if (userSenderId != jwtUserId)
-            throw new WebRequestError('Você não tem autorização para deletar esse convite', StatusCodes.NOT_FOUND)
         try {
+            if (userSenderId != jwtUserId)
+                throw new WebRequestError('Você não tem autorização para deletar esse convite', StatusCodes.NOT_FOUND)
+
             let inviteRepo = getRepository(Invite)
             const invite = await inviteRepo.findOne({ id: inviteId }, { where: { id: userSenderId } })
             if (!invite)
@@ -98,9 +99,11 @@ class InviteController {
 
     async update(req: Request, res: Response, next: NextFunction) {
         const { inviteId, jwtUserId, userReceiverId, accepted, rejected } = req.body as InviteRequestBody
-        if (userReceiverId != jwtUserId)
-            throw new WebRequestError('Você não tem autorização para aceitar esse convite', StatusCodes.NOT_FOUND)
+
         try {
+            if (userReceiverId != jwtUserId)
+                throw new WebRequestError('Você não tem autorização para aceitar esse convite', StatusCodes.NOT_FOUND)
+
             let inviteRepo = getRepository(Invite)
             const invite = await inviteRepo.findOne(inviteId)
             if (userReceiverId.length <= 1)
@@ -111,8 +114,7 @@ class InviteController {
                 accepted: invite.accepted != accepted ? accepted : invite.accepted,
                 rejected: invite.rejected != rejected ? rejected : invite.rejected
             }
-            updatedInvite.confirmationDate = updatedInvite.accepted == true ? new Date(Date.now()) : null
-
+            updatedInvite.accepted == true ? updatedInvite.confirmationDate = new Date(Date.now()) : null
 
             const resp = await inviteRepo.update(invite, {})
             return res.status(StatusCodes.OK).json({ msg: 'Pedido de amizade enviado com sucesso' })

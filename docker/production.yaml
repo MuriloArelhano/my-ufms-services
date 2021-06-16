@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  user-service-db:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    expose:
+      - "5432"
+    networks:
+      - backend
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: users
+
+  post-service-db:
+    image: postgres
+    ports:
+      - 5433:5432
+    expose:
+      - "5433"
+    networks:
+      - backend
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: posts
+
+  user-service-api:
+    image: myufms/user-service
+    restart: always
+    build:
+      context: ../user-service
+      dockerfile: Dockerfile
+    ports:
+      - 3334:3334
+    depends_on:
+      - user-service-db
+    networks:
+      - backend
+    environment:
+      NODE_ENV: production
+      PROD_SERVER_PORT: 3334
+
+networks:
+  backend:
+    driver: "overlay"

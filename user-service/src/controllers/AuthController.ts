@@ -1,4 +1,4 @@
-import { getRepository } from "typeorm"
+import { getRepository, getConnection } from "typeorm"
 import { User } from "../models/UserModel";
 import { StatusCodes } from "http-status-codes";
 import { Response, Request, NextFunction } from "express";

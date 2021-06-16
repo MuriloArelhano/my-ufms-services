@@ -1,4 +1,4 @@
-import { getRepository } from "typeorm"
+import { getConnection, getRepository } from "typeorm"
 import { StatusCodes } from "http-status-codes";
 import { Response, Request, NextFunction } from "express";
 import { WebRequestError } from "../utils/errors";
@@ -32,7 +32,7 @@ class UserController  {
         const { jwtUserId: userId, phone } = req.body as UserRequestBody
 
         try {
-            const userRepo = getRepository(User)
+            const userRepo =  getRepository(User)
             const user = await userRepo.findOne(userId)
 
             if (!user)
@@ -50,7 +50,7 @@ class UserController  {
     async delete(req: Request, res: Response, next: NextFunction) {
         const { jwtUserId, password } = req.body as UserRequestBody
         try {
-            const userRepo = getRepository(User)
+            const userRepo =  getRepository(User)
             const user = await userRepo.findOne(jwtUserId)
             console.log(user);
             
