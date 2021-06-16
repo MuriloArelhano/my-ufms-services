@@ -1,17 +1,17 @@
 {
     "type": "postgres",
-    "host": "0.0.0.0",
+    "host": "user-service-db",
     "port": "5432",
     "username": "root",
     "password": "root",
     "database": "users",
     "entities": [
-        "src/models/**/*.ts"
+        "build/models/**/*.js"
     ],
     "migrations": [
-        "src/migrations/*.ts"
+        "build/migrations/*.js"
     ],
     "cli": {
-        "migrationsDir": "src/migrations"
+        "migrationsDir": "build/migrations"
     }
 }

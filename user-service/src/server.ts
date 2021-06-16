@@ -10,18 +10,18 @@ import { WebRequestError } from "./utils/errors";
 import { StatusCodes } from "http-status-codes";
 import { genderRoutes } from "./routes/genderRoutes";
 import { profileRoutes } from "./routes/profileRoutes";
-import * as helmet from "helmet"; // Security
+import helmet from "helmet";
 import { inviteRoutes } from "./routes/inviteRoutes";
 
-
 const SERVER_PORT = process.env.NODE_ENV == 'production' ? process.env.PROD_SERVER_PORT : process.env.DEV_SERVER_PORT
-
 
 const app: Application = express()
 // O "cors" habilita que a API possa ser chamada de um host fora do localhost ou de ip diferente
 app.use(cors())
 
 app.use(cookieParser());
+
+//Proteje contra aluns tipos de ataques
 app.use(helmet())
 
 // Interpreta o body da requisição
