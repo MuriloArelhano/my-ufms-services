@@ -1,0 +1,25 @@
+openapi: "3.0.0"
+components:
+  signup:
+      type: object
+      properties:
+        email:
+          type: string
+          required:
+            - "email"
+        password:
+          type: string
+        phone:
+          type: string
+        birthdate:
+          type: string
+        genderName || genderId:
+          type: string
+    signin:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+

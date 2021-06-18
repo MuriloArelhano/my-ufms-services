@@ -30,4 +30,3 @@ const Post = sequelize.define('Post', {
 }, {tableName: 'post'});
 
 module.exports = Post
-

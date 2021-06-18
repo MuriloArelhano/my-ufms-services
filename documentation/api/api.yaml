@@ -8,9 +8,10 @@ info:
     email: murilo.arelhano@hotmail.com
 
 servers:
-  - url: http://localhost:3333/v1
+  - url: http://localhost:3334/v1
 
 paths:
+ 
   /gender:
     get:
       description: Returns all genders
@@ -18,7 +19,7 @@ paths:
         "200":
           description: OK
 
-  /gender/{id}/{name}:
+  /gender/{id}:
     get:
       parameters:
         - $ref: "#components/parameters/id"
@@ -46,8 +47,23 @@ paths:
         "200":
           description: OK
 
+  /auth/signin:
+    post:
+      summary: Signin on auth service
+      description: Return a JWT token to authorization user
+      requestBody:
+        required: true
+        description: Send user and password
+        content:
+          application/json:
+            schema:
+              $ref: "#components/schemas/signin"
+      responses:
+        "200":
+          description: ok
   /auth/signup:
     post:
+      summary: Create a new user
       description: Create a new user and before creating a profile for the user
       requestBody:
         required: true
@@ -55,59 +71,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#components/schemas/signup"
+              $ref: "./user.yaml#components/schemas/signup"
 
       responses:
         "200":
           description: OK
 
-  /auth/signin:
-    post:
-      description: Return a JWT token to authorization user
-      requestBody:
-        required: true
-        description: User information to register
-        content:
-          application/json:
-            schema:
-              $ref: "#components/schemas/signup"
-      responses:
-        "200":
-          description: ok
-
 components:
-  schemas:
-    signup:
-      type: object
-      properties:
-        email:
-          type: string
-          required:
-            - "email"
-        password:
-          type: string
-    signin:
-      type: object
-      properties:
-        email:
-          type: string
-        password:
-          type: string
-
-  parameters:
-    id:
-      name: id
-      in: path
-      description: Pass directly id of row
-      schema:
-        type: string
-    name:
-      name: name
-      in: path
-      description: In some cases you don't need id
-      schema:
-        type: string
-
   securitySchemes:
     name:
       type: http
