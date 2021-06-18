@@ -1,0 +1,21 @@
+_id: req_wrk_a9ff1c3bb8ba49be84c1b8db66a93d50a8251907
+type: Request
+parentId: wrk_a9ff1c3bb8ba49be84c1b8db66a93d50
+modified: 1624044990477
+created: 1624044990477
+url: "{{ base_url }}/gender/{{ id }}"
+name: /gender/{id}
+description: ""
+method: DELETE
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1624044990477
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

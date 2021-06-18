@@ -1,0 +1,25 @@
+_id: req_wrk_a9ff1c3bb8ba49be84c1b8db66a93d50d55415da
+type: Request
+parentId: wrk_a9ff1c3bb8ba49be84c1b8db66a93d50
+modified: 1624044990459
+created: 1624044990459
+url: "{{ base_url }}/auth/signup"
+name: Create a new user
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: "null"
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+authentication: {}
+metaSortKey: -1624044990459
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
