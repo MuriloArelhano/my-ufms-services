@@ -1,8 +1,11 @@
-const router = require("express").Router()
+const router = require('express').Router()
 const auth = require('../middleware/authMiddleware')
 const post = require('../controller/postController')
 
-router.get('', auth.validateJWT)
-router.post('', auth.validateJWT)
+router.use(auth.validateJWT);
+
+router.get('', post.getUserPosts)
+router.post('', post.createNewUserPost)
+router.delete('', post.deleteUserPost)
 
 module.exports = router

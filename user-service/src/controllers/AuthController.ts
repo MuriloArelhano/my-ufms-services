@@ -8,6 +8,7 @@ import path from 'path'
 import { UserRequestBody } from "../types";
 import { signOptions } from "../utils/jwt";
 import { WebRequestError } from "../utils/errors";
+import moment from "moment";
 
 
 class AuthController {
@@ -19,9 +20,15 @@ class AuthController {
     */
     async signup(req: Request, res: Response, next: NextFunction) {
         try {
-            const { email, password, phone } = req.body as UserRequestBody
+            const { email, password, phone, birthdate, completeName } = req.body as UserRequestBody
             const userRepository = getRepository(User);
             const user = await userRepository.findOne({ where: { email: email } })
+            if (!birthdate || !completeName)
+                throw new WebRequestError('Informações faltando, data de nascimento ou nome completo não informado', StatusCodes.BAD_REQUEST)
+
+            if (!moment(birthdate, 'YYYY-MM-DD').isValid())
+                throw new WebRequestError('Data em formato inválido', StatusCodes.BAD_REQUEST)
+                
             if (user) {
                 throw new WebRequestError('Esse usuário já existe!', StatusCodes.CONFLICT)
             }
@@ -57,7 +64,7 @@ class AuthController {
             // Implementar um CRFS para segurança
             var privateKey = fs.readFileSync(path.join(__dirname, '..', '..', 'private.key'));
             const token = JWT.sign(payload, privateKey, signOptions)
-            return res.cookie('usrJwtToken', token, {httpOnly: true, expires: new Date(Date.now() + 2 * 3600000) })
+            return res.cookie('usrJwtToken', token, { httpOnly: true, expires: new Date(Date.now() + 2 * 3600000) })
                 .status(StatusCodes.OK).json({
                     msg: 'Usuário logado com sucesso',
                     token: token

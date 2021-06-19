@@ -4,7 +4,7 @@ import { Response, Request, NextFunction } from "express";
 import { WebRequestError } from "../utils/errors";
 import { Invite } from "../models/InviteModel";
 import { User } from "../models/UserModel";
-import { InviteRequestBody } from "../types";
+import { InviteRequestBody, UserRequestBody } from "../types";
 
 
 class InviteController {
@@ -47,6 +47,32 @@ class InviteController {
         }
     }
 
+    async getUserAcceptedFriends(req: Request, res: Response, next: NextFunction) {
+        const { jwtUserId } = req.body as UserRequestBody
+        try {
+            let inviteRepo = getRepository(Invite)
+            const invites = await inviteRepo.createQueryBuilder("invite")
+                .where("(accepted = true AND (invite.userSender = :jwtUserId OR invite.userReceiver = :jwtUserId)) ", { jwtUserId })
+                .getManyAndCount()
+
+            const friendIds = invites[0].map(el => {
+                if (el.userReceiverId == jwtUserId) {
+                    return el.userSenderId
+                } else {
+                    return el.userReceiverId
+                }
+            })
+
+            console.log(friendIds)
+
+            return res.status(StatusCodes.OK).json({ msg: 'Buscando' })
+
+        } catch (err: any) {
+            next(err)
+        }
+
+    }
+
     async sendNewInvite(req: Request, res: Response, next: NextFunction) {
         const { jwtUserId, userReceiverId } = req.body as InviteRequestBody
         try {
@@ -58,14 +84,16 @@ class InviteController {
             if (!userSender || !userReceiver)
                 throw new WebRequestError('Algum dos usuários não foram encontrados', StatusCodes.NOT_FOUND)
 
+            if (!userSender || !userReceiver)
+                throw new WebRequestError('Algum dos usuários não foram encontrados', StatusCodes.NOT_FOUND)
+
             const userInvites = await inviteRepo.createQueryBuilder("invite")
-                .where([{ userSender: jwtUserId }, { userReceiver: userReceiverId }])
-                .getMany()
-            console.log(userInvites);
+                .where("invite.userSender = :jwtUserId  ", { jwtUserId })
+                .getManyAndCount()
 
-            if (userInvites.length > 0)
+
+            if (userInvites[1] > 0)
                 throw new WebRequestError('Você já enviou uma solicitação para esse usuário', StatusCodes.CONFLICT)
-
 
             const newInvite = new Invite(userSender, userReceiver)
             const resp = await inviteRepo.save(newInvite)

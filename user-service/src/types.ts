@@ -8,6 +8,8 @@ export type UserRequestBody = {
     email: string,
     password: string,
     phone: number,
+    completeName: string
+    birthdate: Date
     jwtUserId?: string,
     jwtUserToken?: string
 }

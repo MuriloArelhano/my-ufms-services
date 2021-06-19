@@ -5,10 +5,14 @@ import AuthMiddleware from "../middlewares/AuthMiddleware"
 
 const inviteRoutes = Router()
 
-inviteRoutes.get('/sent', AuthMiddleware.validateJWT, InviteController.getAllSentUserInvites)
+inviteRoutes.use('', AuthMiddleware.validateJWT)
 
-inviteRoutes.get('/received', AuthMiddleware.validateJWT, InviteController.getAllReceivedUserInvites)
+inviteRoutes.get('/sent', InviteController.getAllSentUserInvites)
 
-inviteRoutes.post('', AuthMiddleware.validateJWT, InviteController.sendNewInvite)
+inviteRoutes.get('/received', InviteController.getAllReceivedUserInvites)
+
+inviteRoutes.get('/friends/accepted', InviteController.getUserAcceptedFriends)
+
+inviteRoutes.post('', InviteController.sendNewInvite)
 
 export { inviteRoutes }
