@@ -44,6 +44,7 @@ class AuthMiddleware {
         try {
             var publicKey = fs.readFileSync(path.join(__dirname, '..', '..', 'public.key'));
             JWT.verify(usrJwtToken, publicKey, verifyOptions, (err, decoded: any) => {
+                console.log(err)
                 if (err) {
                     throw new WebRequestError("Token invalido ou expirado", StatusCodes.UNAUTHORIZED)
                 }

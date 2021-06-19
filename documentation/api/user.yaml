@@ -75,7 +75,7 @@ paths:
           description: OK
     delete:
       description: Delete a gender by id or name
-      responses:
+      responses: 
         "200":
           description: OK
 

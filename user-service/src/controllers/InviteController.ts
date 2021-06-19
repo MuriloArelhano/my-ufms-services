@@ -50,6 +50,7 @@ class InviteController {
     async getUserAcceptedFriends(req: Request, res: Response, next: NextFunction) {
         const { jwtUserId } = req.body as UserRequestBody
         try {
+
             let inviteRepo = getRepository(Invite)
             const invites = await inviteRepo.createQueryBuilder("invite")
                 .where("(accepted = true AND (invite.userSender = :jwtUserId OR invite.userReceiver = :jwtUserId)) ", { jwtUserId })
@@ -63,9 +64,7 @@ class InviteController {
                 }
             })
 
-            console.log(friendIds)
-
-            return res.status(StatusCodes.OK).json({ msg: 'Buscando' })
+            return res.status(StatusCodes.OK).json({ friendIds: friendIds, count: invites[1] })
 
         } catch (err: any) {
             next(err)

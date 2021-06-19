@@ -56,10 +56,16 @@ exports.getUserPosts = async (req, res, next) => {
     }
 }
 exports.getFeedPosts = async (req, res, next) => {
-    const { jwtUserId } = req.body
+    const { usrJwtToken, jwtUserId } = Object.assign({}, req.cookies, req.body, req.get('Authorization'), req.query)
     try {
-        const friendIds = await axios.get('localhost:3334/v1/user/friends',)
-        const feedPosts = await PostModel.findAndCountAll({ where: { user_id: friendIds }, order: ['createdAt', 'DESC']})
+        let friendIds = await axios.get('http://localhost:3333/v1/invite/friends/accepted', {
+            params: {
+                usrJwtToken: usrJwtToken
+            }
+        })
+        friendIds = friendIds.data.friendIds
+        friendIds.push(jwtUserId)
+        const feedPosts = await PostModel.findAndCountAll({ where: { user_id: friendIds }, order: [['createdAt', 'DESC']] })
         res.status(200).json(feedPosts)
     } catch (e) {
         next(e)

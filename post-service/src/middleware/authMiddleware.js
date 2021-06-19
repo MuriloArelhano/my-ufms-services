@@ -6,7 +6,6 @@ const WebRequestError = require('http-errors')
 
 exports.validateJWT = (req, res, next) => {
     const { usrJwtToken } = Object.assign({}, req.cookies || req.body || req.get('Authorization') || req.query)
-    console.log(usrJwtToken)
     try {
         var publicKey = fs.readFileSync(path.join(__dirname, '..', '..', 'public.key'));
         JWT.verify(usrJwtToken, publicKey, verifyOptions, (err, decoded) => {

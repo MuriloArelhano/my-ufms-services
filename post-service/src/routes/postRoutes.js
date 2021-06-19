@@ -8,4 +8,6 @@ router.get('', post.getUserPosts)
 router.post('', post.createNewUserPost)
 router.delete('', post.deleteUserPost)
 
+router.get('/feed', post.getFeedPosts)
+
 module.exports = router
