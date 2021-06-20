@@ -26,9 +26,9 @@ class AuthController {
             if (!birthdate || !completeName)
                 throw new WebRequestError('Informações faltando, data de nascimento ou nome completo não informado', StatusCodes.BAD_REQUEST)
 
-            if (!moment(birthdate, 'YYYY-MM-DD').isValid())
-                throw new WebRequestError('Data em formato inválido', StatusCodes.BAD_REQUEST)
-                
+            if (!moment(birthdate, 'YYYY-MM-DD', true).isValid())
+                throw new WebRequestError('Data em formato inválido, tente "YYYY-MM-DD"', StatusCodes.BAD_REQUEST)
+
             if (user) {
                 throw new WebRequestError('Esse usuário já existe!', StatusCodes.CONFLICT)
             }

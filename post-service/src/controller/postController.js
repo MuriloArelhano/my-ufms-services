@@ -1,6 +1,7 @@
 const PostModel = require('../model/postModel')
 const WebRequestError = require('http-errors')
 const axios = require('axios')
+const userServiceEndpoint = `http://${process.env.USER_SERVICE_HOST}:${process.env.USER_SERVICE_PORT}`
 
 exports.createNewUserPost = async (req, res, next) => {
     const { jwtUserId, description } = req.body
@@ -58,7 +59,7 @@ exports.getUserPosts = async (req, res, next) => {
 exports.getFeedPosts = async (req, res, next) => {
     const { usrJwtToken, jwtUserId } = Object.assign({}, req.cookies, req.body, req.get('Authorization'), req.query)
     try {
-        let friendIds = await axios.get('http://localhost:3333/v1/invite/friends/accepted', {
+        let friendIds = await axios.get(`${userServiceEndpoint}/v1/invite/friends/accepted`, {
             params: {
                 usrJwtToken: usrJwtToken
             }

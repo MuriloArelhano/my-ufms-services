@@ -1,9 +1,10 @@
-version: "3.9"
+version: "3.8"
 
 services:
   user-service-db:
     image: postgres
-    restart: always
+    volumes:
+      - pgdata-user:/var/lib/postgresql/user
     ports:
       - 5432:5432
     expose:
@@ -17,6 +18,8 @@ services:
 
   post-service-db:
     image: postgres
+    volumes:
+      - pgdata-post:/var/lib/postgresql/post
     ports:
       - 5433:5432
     expose:
@@ -30,9 +33,8 @@ services:
 
   user-service-api:
     image: myufms/user-service
-    restart: always
     build:
-      context: ../user-service
+      context: ../../user-service
       dockerfile: Dockerfile
     ports:
       - 3334:3334
@@ -44,6 +46,28 @@ services:
       NODE_ENV: production
       PROD_SERVER_PORT: 3334
 
+  post-service-api:
+    image: myufms/post-service
+    build:
+      context: ../../post-service
+      dockerfile: Dockerfile
+    ports:
+      - 4445:4445
+    depends_on:
+      - post-service-db
+      - user-service-api
+    networks:
+      - backend
+    environment:
+      NODE_ENV: production
+      PROD_SERVER_PORT: 4445
+      USER_SERVICE_HOST: user-service-db
+      USER_SERVICE_PORT: 3334
+
 networks:
   backend:
-    driver: "bridge"
+    driver: "overlay"
+
+volumes:
+  pgdata-user:
+  pgdata-post:

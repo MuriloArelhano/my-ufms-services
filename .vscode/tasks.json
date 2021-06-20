@@ -5,17 +5,17 @@
         {
             "label": "Build Docker Image",
             "type": "shell",
-            "command": "docker-compose -f ./docker/production.yaml build "
+            "command": "docker-compose -f ./docker/production/services.yaml build "
         },
         {
             "label": "Docker Compose Up Production",
             "type": "shell",
-            "command": "docker-compose -f ./docker/production.yaml up "
+            "command": "docker-compose -f ./docker/production/services.yaml up "
         },
         {
             "label": "Docker Swarm Stack Production",
             "type": "shell",
-            "command": "docker stack deploy --compose-file ./docker/production.yaml myufms-swarm"
+            "command": "docker stack deploy --compose-file ./docker/production/services.yaml myufms-swarm"
         },
         {
             "label": "Docker Swarm Remove Services",

@@ -1,13 +1,15 @@
+const dotenv = require('dotenv')
+dotenv.config()
 const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
 const cookieParser = require('cookie-parser')
 const sequelize = require('./database/db')
 const models = require('./model/indexModels.js')
-const dotenv = require('dotenv')
-dotenv.config()
 const postRouter = require('./routes/postRoutes')
-const SERVER_PORT = process.env.DEV_SERVER_PORT
+const SERVER_PORT = process.env.NODE_ENV == 'development'?  process.env.DEV_SERVER_PORT : process.env.PROD_SERVER_PORT
+
+
 
 const app = express()
 app.use(express.json())
