@@ -9,4 +9,4 @@ RUN npx tsc
 
 EXPOSE 3334
 
-CMD ./docker-start.sh
+CMD sh ./docker-start.sh
