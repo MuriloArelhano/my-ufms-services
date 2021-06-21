@@ -1,0 +1,38 @@
+openapi: "3.0.0"
+info:
+  title: My UFMS APIs
+  version: "1.0.0"
+  description: API construida na arquitetura de micro serviços para suprir serviços da rede social interna da UFMS.
+  contact:
+    name: Murilo Arelhano
+    email: murilo.arelhano@hotmail.com
+
+servers:
+  - url: http://localhost:4444/v1
+
+tags:
+  - name: "Posts"
+    description: "Controle de usuários"
+
+
+paths:
+  /post:
+    post:
+      tags:
+        - "Posts"
+      summary: Create a new post
+      description: Create a new post in posts database with post service
+      responses:
+        '200':
+          description: OK
+
+
+components:
+  securitySchemes:
+    cookieAuth:
+      in: cookie
+      type: apiKey
+      name: usrJwtToken
+
+security:
+  - cookieAuth: []

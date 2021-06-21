@@ -6,7 +6,7 @@ module.exports = {
       id: {
         type: Sequelize.DataTypes.UUID,
         allowNull: false,
-        defaultValue: Sequelize.DataTypes.UUIDV4,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true
       },
       user_id: {
@@ -27,7 +27,7 @@ module.exports = {
         allowNull: true,
         defaultValue: 0
       }
-    })
+    }, { timestamp: true, createdAt: true, updatedAt: true })
 
   },
 

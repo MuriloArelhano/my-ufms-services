@@ -1,6 +1,6 @@
 {
     "type": "postgres",
-    "host": "user-service-db",
+    "host": "user-db",
     "port": "5432",
     "username": "root",
     "password": "root",

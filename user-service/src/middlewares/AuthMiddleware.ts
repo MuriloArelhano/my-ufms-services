@@ -40,10 +40,12 @@ class AuthMiddleware {
 
     validateJWT(req: Request, res: Response, next: NextFunction) {
 
-        const usrJwtToken = req.body.usrJwtToken || req.get('Authorization') || req.query.usrJwtToken || req.cookies.usrJwtToken
+        const { usrJwtToken } = Object.assign({}, req.body, req.get('Authorization'), req.query, req.cookies)
+        console.log(usrJwtToken)
         try {
             var publicKey = fs.readFileSync(path.join(__dirname, '..', '..', 'public.key'));
             JWT.verify(usrJwtToken, publicKey, verifyOptions, (err, decoded: any) => {
+                console.log(err)
                 if (err) {
                     throw new WebRequestError("Token invalido ou expirado", StatusCodes.UNAUTHORIZED)
                 }
