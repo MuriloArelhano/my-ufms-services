@@ -5,6 +5,7 @@
     "username": "root",
     "password": "root",
     "database": "users",
+    "synchronize": true,
     "entities": [
         "build/models/**/*.js"
     ],
