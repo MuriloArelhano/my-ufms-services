@@ -1,0 +1,94 @@
+_id: spc_f174f748c2344540b366a5b6e4ec4535
+type: ApiSpec
+parentId: wrk_a9ff1c3bb8ba49be84c1b8db66a93d50
+modified: 1624045470856
+created: 1624044802250
+fileName: My Ufms
+contents: >-
+  openapi: "3.0.0"
+
+  info:
+    title: My UFMS APIs
+    version: "1.0.0"
+    description: API construida na arquitetura de micro serviços para suprir serviços da rede social interna da UFMS.
+    contact:
+      name: Murilo Arelhano
+      email: murilo.arelhano@hotmail.com
+
+  servers:
+    - url: http://localhost:3334/v1
+
+  paths:
+   
+    /gender:
+      get:
+        description: Returns all genders
+        responses:
+          "200":
+            description: OK
+
+    /gender/{id}:
+      get:
+        description: Returns a gender by id or name
+        responses:
+          "200":
+            description: OK
+      delete:
+        description: Delete a gender by id or name
+        responses:
+          "200":
+            description: OK
+
+    /user:
+      delete:
+        description: Delete all user information
+        responses:
+          "200":
+            description: OK
+
+      get:
+        description: Get all user information
+        responses:
+          "200":
+            description: OK
+
+    /auth/signin:
+      post:
+        summary: Signin on auth service
+        description: Return a JWT token to authorization user
+        requestBody:
+          required: true
+          description: Send user and password
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/signin"
+        responses:
+          "200":
+            description: ok
+    /auth/signup:
+      post:
+        summary: Create a new user
+        description: Create a new user and before creating a profile for the user
+        requestBody:
+          required: true
+          description: User information to register
+          content:
+            application/json:
+              schema:
+                $ref: "./user.yaml#components/schemas/signup"
+
+        responses:
+          "200":
+            description: OK
+
+  components:
+    securitySchemes:
+      bearerAuth:            
+        type: http
+        scheme: bearer
+        bearerFormat: JWT   
+
+  security:
+    - bearerAuth: [] 
+contentType: yaml

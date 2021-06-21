@@ -1,0 +1,9 @@
+_id: wrk_a9ff1c3bb8ba49be84c1b8db66a93d50
+type: Workspace
+parentId: null
+modified: 1624044990488
+created: 1624044802246
+name: My UFMS APIs 1.0.0
+description: API construida na arquitetura de micro serviços para suprir
+  serviços da rede social interna da UFMS.
+scope: design

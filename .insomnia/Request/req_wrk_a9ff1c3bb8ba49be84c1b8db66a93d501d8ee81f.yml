@@ -1,0 +1,21 @@
+_id: req_wrk_a9ff1c3bb8ba49be84c1b8db66a93d501d8ee81f
+type: Request
+parentId: wrk_a9ff1c3bb8ba49be84c1b8db66a93d50
+modified: 1624044990475
+created: 1624044990475
+url: "{{ base_url }}/user"
+name: /user
+description: ""
+method: DELETE
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1624044990475
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

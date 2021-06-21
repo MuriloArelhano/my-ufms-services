@@ -1,0 +1,30 @@
+_id: req_wrk_a9ff1c3bb8ba49be84c1b8db66a93d5021d060a7
+type: Request
+parentId: wrk_a9ff1c3bb8ba49be84c1b8db66a93d50
+modified: 1624045135466
+created: 1624044990468
+url: "{{ base_url }}/auth/signin"
+name: Signin on auth service
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"email": "muriloarelhano",
+    	"password": "123456"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_e96c748950664c53884370289dd7129d
+authentication: {}
+metaSortKey: -1624044990468
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
