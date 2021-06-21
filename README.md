@@ -26,7 +26,7 @@ Após ter instalado docker em sua máquina, execute o docker em modo swarm para 
 
 > docker swarm init
 
-Caso esteja utilizando o linux, lembre-se de colocar antes de cada comando mostrado, o comando `sudo`. 
+Caso esteja utilizando o linux, lembre-se de colocar antes de cada comando mostrado, o comando `sudo`.
 
 Depois para realizar o build da imagem das aplicações, vá até a raiz do projeto clonado do github e execute o comando:
 
@@ -42,6 +42,7 @@ E por fim, utilize o comando abaixo para criar os serviços referente a aplicaç
 
 Caso algum dos serviços dê algum problema ou não execute corretamente, tente executar novamente o último comando, e ao invés de ser criado novamente, o docker swarm apenas realizará um update dos serviços.
 
-A partir de agora, o serviço de usuário está disponível em` <IP_LOCAL_MAQUINA>:3333` e o serviço de posts está disponível na porta `4444` para ser testado com alguma interface que realize requisições HTTP.
+
+A partir de agora o serviço de usuário está disponível em` <IP_LOCAL_MAQUINA>:3333` e o serviço de posts está disponível na porta `3334` para ser testado com alguma interface que realize requisições HTTP.
 
 Lembrando que as rotas estão presentes na documentação da raiz do código.

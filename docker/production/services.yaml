@@ -56,7 +56,6 @@ services:
       - 3334:4445
     depends_on:
       - post-db
-      - user-api
     networks:
       - microservices-network
 
