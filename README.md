@@ -4,6 +4,9 @@
 
 Este projeto foi construído para simular a comunicação entre micro serviços rodando em um cluster de containers docker com docker swarm. Foi criado um cluster com docker swarm contendo 2 nodes, porém o ambiente funciona em apenas uma máquina perfeitamente. Foram criados dois micro serviços, um de autenticação e manipulação do usuário e outro para criação de posts, como em um rede social.
 
+## Grupo
+Mariane Mori Guiraldelli, Murilo Esteca Arelhano
+
 ### Descrição do projeto
 
 A descrição do projeto, junto ao documento de requisitos, se encontra no wiki deste repositório do github.
