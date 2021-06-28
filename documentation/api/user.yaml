@@ -11,14 +11,14 @@ servers:
   - url: http://localhost:3334/v1
 
 tags:
-  - name: "User"
-    description: "Controle de usuários"
-  - name: "Gender"
-    description: "Controle de generos"
   - name: "Auth"
     description: "Autenticação para aplicações"
+  - name: "User"
+    description: "Controle de usuários"
   - name: "Profile"
     description: "Controler do profile dos usuários"
+  - name: "Gender"
+    description: "Controle de generos"
 
 paths:
 
@@ -64,12 +64,10 @@ paths:
       responses:
         "200":
           description: OK
-
-  /gender/{id}:
-    get:
+    post:
       tags:
-        - Gender
-      description: Returns a gender by id or name
+        - "Gender"
+      description: Create a new gender for users
       responses:
         "200":
           description: OK
@@ -78,6 +76,16 @@ paths:
       responses: 
         "200":
           description: OK
+
+  /gender/all:
+    get:
+      tags:
+        - Gender
+      description: Returns a gender by id or name
+      responses:
+        "200":
+          description: OK
+
 
   /user:
     delete:
